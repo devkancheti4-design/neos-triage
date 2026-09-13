@@ -28,11 +28,14 @@ jobs:
           python-version: "3.12"
 
       - name: Run the tests before building anything
-        # A release that has not run tests/test_triage.py is a release whose
-        # hand set has not been proved total.
+        # A release that has not run these is a release whose hand set has
+        # not been proved total and whose decision path has not been proved
+        # dependency-free. tests/run.py is NOT here -- it belongs to the
+        # sibling project and is not distributed; referencing it would have
+        # failed this job on its first step and published nothing.
         run: |
-          python tests/run.py
           python tests/test_triage.py
+          python -c "import neos; print('neos', neos.__version__)"
 
       - name: Build
         run: |
