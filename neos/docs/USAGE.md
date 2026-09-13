@@ -75,6 +75,25 @@ them apart. Do not turn the window up to save money without re-running
 `fairtest.py`-style checks on your own stream. [FAIR.md](FAIR.md) has the
 whole story.
 
+## It is English-bound unless your format carries a level
+
+When a stream has **no level field**, actionability is inferred from English
+words (`error`, `failed`, `timeout`, ...). Everything else is read as routine:
+
+    "échec de la connexion"     -> suppressed
+    "Fehler beim Verbinden"     -> suppressed
+    "错误: 磁盘已满"              -> suppressed
+
+There is no clever fix for this; a keyword list is not a language model. The
+escape hatch is real though: **a format that carries its own severity is
+language-independent**, because the level is read rather than guessed.
+`ndjson`, `logfmt`, `rfc5424` and `dotnet` all carry one; plain syslog does
+not. If your logs are not in English, emit a level field.
+
+(ANSI colour used to cause the same silent suppression — in `\x1b[31mFAILED`
+the `m` is a word character, so `\bfail` could not match. Escapes are now
+stripped at the boundary.)
+
 ## Before you trust it
 
 Measured incident recall is **71.2%**, 95% CI [58.6%, 81.2%], and false-page

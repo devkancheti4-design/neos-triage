@@ -141,6 +141,8 @@ def test_signature_collapses_varying_ids_but_not_different_events():
 @case
 def test_every_adapter_parses_its_own_format():
     samples = {
+        "logfmt": 'level=error ts=2026-09-13T07:45:04Z msg="disk full" svc=api',
+        "rfc5424": "<131>1 2026-09-13T07:45:04Z host app 1 - - failed to authenticate",
         "syslog-iso": "2024-10-29 12:54:06-07 host softwareupdated[176]: Starting",
         "syslog-bsd": "Sep 13 00:01:10 host syslogd[363]: ASL Sender Statistics",
         "dotnet": "2026-01-30 09:39:22.465 - [  4120] - [     1] - INFO  - "
@@ -315,6 +317,63 @@ def test_draw_is_reproducible_for_a_seed():
     c, _ = draw(rows, per_stratum=20, seed=4)
     assert [x["message"] for x in a] == [x["message"] for x in b]
     assert [x["message"] for x in a] != [x["message"] for x in c]
+
+
+@case
+def test_ansi_colour_does_not_hide_an_error():
+    """In "\x1b[31mFAILED" the char before F is "m", a word character, so
+    \\bfail(ed)? never matches and a red FAILED reads as routine. CI, Docker
+    and Kubernetes colour by default, so this silently suppressed errors in
+    exactly the streams people most want triaged."""
+    from neos.stream import ADAPTERS, strip_ansi
+    from neos.triage import NEEDS_ACTION
+    import json as _j
+    by = {a.name: a for a in ADAPTERS}
+    ev = by["syslog-iso"].parse(
+        "2024-10-29 12:54:06-07 h svc[1]: \x1b[31mFAILED\x1b[0m to mount")
+    assert ev.message == "FAILED to mount", repr(ev.message)
+    assert NEEDS_ACTION.search(ev.message)
+    j = by["ndjson"].parse(_j.dumps({"level": "\x1b[31mERROR\x1b[0m",
+                                     "message": "x", "logger": "svc"}))
+    assert j.level == "ERROR" and j.severity == 1, (j.level, j.severity)
+    assert strip_ansi("\x1b[1;31ma\x1b[0mb") == "ab"
+
+
+@case
+def test_settle_mark_covers_every_key_a_hand_writes():
+    """_settled_mark replaced a json.dumps that was 39% of runtime. If a hand
+    starts writing a key the fingerprint does not read, the settle loop stops
+    noticing that round's work."""
+    import inspect, re as _re
+    from neos.triage import rule, _settled_mark
+    src = inspect.getsource(rule)
+    written = set(_re.findall(r'case\["(\w+)"\]', src)) | \
+              set(_re.findall(r'case\.setdefault\("(\w+)"', src))
+    seen = set(_re.findall(r'case\.get\("(\w+)"\)', inspect.getsource(_settled_mark)))
+    missing = written - seen - {"dispose"}
+    assert not missing, f"settle loop writes {missing} but the fingerprint ignores them"
+
+
+@case
+def test_rfc5424_reads_severity_from_the_pri_rather_than_guessing():
+    """<131> is facility 16, severity 3 = err. Reading it means confidence
+    1.0 instead of 0.70, so UNSURE stays informative."""
+    from neos.stream import ADAPTERS
+    by = {a.name: a for a in ADAPTERS}
+    ev = by["rfc5424"].parse("<131>1 2026-09-13T07:45:04Z h app 1 - - boom")
+    assert ev.level == "err" and ev.severity == 1, (ev.level, ev.severity)
+    assert by["rfc5424"].parse("<134>1 2026-09-13T07:45:04Z h app 1 - - x").level == "info"
+
+
+@case
+def test_logfmt_does_not_claim_lines_that_merely_contain_equals():
+    """A loose logfmt adapter would win detection on every stream and parse
+    half the world into nonsense."""
+    from neos.stream import ADAPTERS
+    by = {a.name: a for a in ADAPTERS}
+    assert by["logfmt"].parse("2024-10-29 12:54:06-07 h svc[1]: a=b") is None
+    assert by["logfmt"].parse("x=1") is None, "one unrecognised key is not logfmt"
+    assert by["logfmt"].parse('level=error msg="x"') is not None
 
 
 def main():
