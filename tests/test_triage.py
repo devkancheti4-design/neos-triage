@@ -376,6 +376,45 @@ def test_logfmt_does_not_claim_lines_that_merely_contain_equals():
     assert by["logfmt"].parse('level=error msg="x"') is not None
 
 
+@case
+def test_the_shipped_laws_certify_as_composable():
+    """The generate -> certify -> keep loop is the thesis. If route or redial
+    ever stops certifying, nothing may be bound to it."""
+    from neos.certify import certify, certify_joint
+    from neos.laws import route, redial, decline, HAVE, NEED
+    r, d = certify(route), certify(redial)
+    assert r["composable"] and r["polarity"] == "narrowing", r
+    assert d["composable"] and d["polarity"] == "widening", d
+    assert certify_joint(decline, HAVE, NEED)["sound"]
+
+
+@case
+def test_the_certifier_detects_polarity_rather_than_assuming_it():
+    """Asserting the narrowing property on a widening law reports a CORRECT
+    law as broken. A certifier that discards good laws is worse than none --
+    and this project has made that exact mistake twice."""
+    from neos.certify import certify
+    ctz = lambda v: (v & -v).bit_length() - 1
+    narrowing = lambda x: ctz(128 | (1 if x & 1 else 0) | (2 if x & 2 else 0))
+    widening = lambda x: 4 - narrowing(x)
+    assert certify(narrowing)["polarity"] == "narrowing"
+    assert certify(widening)["polarity"] == "widening"
+    assert certify(widening)["monotone"], "the dual was judged by the wrong rule"
+
+
+@case
+def test_the_certifier_rejects_a_law_that_is_monotone_but_not_composable():
+    """0/60 homomorphic while 60/60 monotone, measured. Monotonicity is the
+    check a human reviewer runs, and it catches none of these."""
+    from neos.certify import certify
+    ctz = lambda v: (v & -v).bit_length() - 1
+    # a lane that depends on TWO bits -- what hand-writing produces
+    bad = lambda x: ctz(128 | (4 if (x & 1 and x & 2) else 0))
+    r = certify(bad)
+    assert r["monotone"], "expected it to pass the check a human would run"
+    assert not r["homomorphic"] and not r["composable"], r
+
+
 def main():
     p = f = 0
     for c in CASES:

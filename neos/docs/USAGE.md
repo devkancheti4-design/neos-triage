@@ -109,6 +109,17 @@ says should have been surfaced — with Wilson intervals, so 0 failures in 40
 reads as "up to 8.8%", never "0%". Run that on your stream before you let it
 decide anything. [DEPLOY.md](DEPLOY.md) lists what is proven and what is not.
 
+## Certifying your own laws
+
+    python3 -m neos.certify
+
+    from neos.certify import certify, report
+    report({"my_law": my_act_fn})     # exhaustive, ~90 ms per 8-bit law
+
+`composable: True` means the law can be bound to others without checking the
+joint space. A law that is monotone but not homomorphic will pass the review
+a human performs and break composition silently — measured at 0/60.
+
 ## As a library
 
 ```python
