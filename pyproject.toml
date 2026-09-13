@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=77"]   # PEP 639 license expressions
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "neos-triage"
+version = "0.2.0"
+# 0.x ON PURPOSE. Measured incident recall is 71.2% against independent
+# ground truth, false-page rate is unmeasured, and it went 0% -> 71.2% on a
+# dedup bug found last week. A 1.x on PyPI claims a stability nobody has
+# earned yet. See FAIR.md.
+description = "Triage structured event streams by exact law. No model in the decision."
+readme = "README.md"
+authors = [{ name = "Devieswar Kancheti" }]
+requires-python = ">=3.9"
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+# Applies to the `neos` package, which is the only thing packaged here and is
+# verified free of fluidfix's AGPL kernel, which lives in a sibling project
+# that is not distributed here. See DEPLOY.md section 5.
+keywords = ["observability", "alerting", "triage", "logs", "siem", "deterministic"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: System Administrators",
+  "Topic :: System :: Logging",
+  "Topic :: System :: Monitoring",
+  "Programming Language :: Python :: 3",
+]
+dependencies = []          # NONE. The decision path imports nothing.
+
+[project.urls]
+Homepage = "https://github.com/devkancheti4-design/neos-triage"
+Source = "https://github.com/devkancheti4-design/neos-triage"
+Issues = "https://github.com/devkancheti4-design/neos-triage/issues"
+
+[project.scripts]
+neos = "neos.cli:main"
+
+[tool.setuptools]
+packages = ["neos"]
+
+# THE CAVEATS MUST TRAVEL WITH THE CODE. Without this a user installs the
+# tool and gets the confident claims but not the finding that it scored 0%
+# incident recall before a dedup fix, and still misses 17 of 59.
+[tool.setuptools.package-data]
+neos = ["docs/*.md"]

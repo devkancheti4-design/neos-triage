@@ -1,0 +1,58 @@
+# Publish to PyPI via Trusted Publishing (OIDC). No API token anywhere:
+# PyPI verifies the workflow's identity directly, so there is no long-lived
+# credential to leak, rotate or paste.
+#
+# The PyPI side of this is configured at
+# https://pypi.org/manage/account/publishing/ and must match EXACTLY:
+#
+#     PyPI Project Name   neos-triage
+#     Owner               devkancheti4-design
+#     Repository name     neos
+#     Workflow name       publish.yml
+#     Environment name    pypi
+#
+name: publish
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:        # lets you run it by hand from the Actions tab
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run the tests before building anything
+        # A release that has not run tests/test_triage.py is a release whose
+        # hand set has not been proved total.
+        run: |
+          python tests/run.py
+          python tests/test_triage.py
+
+      - name: Build
+        run: |
+          python -m pip install --upgrade build
+          python -m build
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi        # must match the Environment name on PyPI
+    permissions:
+      id-token: write        # REQUIRED: this is what mints the OIDC token
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
