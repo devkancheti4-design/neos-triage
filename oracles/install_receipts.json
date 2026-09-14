@@ -1,0 +1,675 @@
+{
+ "source": "/Library/Receipts/InstallHistory.plist",
+ "snapshot_utc": "2026-09-14T17:25:53+00:00",
+ "note": "Known-good install outcomes, reduced to timestamp + process. displayName omitted deliberately.",
+ "receipts": [
+  {
+   "date": "2024-10-29T19:54:08+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2024-10-29T19:56:14+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:15+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:17+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:19+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:22+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:23+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:25+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:26+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:28+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:30+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:31+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:32+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:34+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:35+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:36+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:38+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:40+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:41+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:43+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:44+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:45+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:46+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:49+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:51+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:52+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:53+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:54+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:55+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:56+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:58+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:56:59+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:00+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:03+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:04+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:06+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:09+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:11+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:12+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:13+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:36+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:57:37+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:58:14+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:58:16+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:58:32+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:58:34+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:58:49+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:58:50+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:59:06+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2024-10-29T19:59:07+00:00",
+   "processName": "installer"
+  },
+  {
+   "date": "2025-08-27T09:03:54+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-08-27T09:04:04+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-08-27T09:07:12+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-08-27T09:08:28+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-09-03T10:40:41+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-09-04T01:54:54+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-09-10T12:08:56+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-09-11T02:33:18+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-09-18T15:12:19+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2025-09-21T06:01:59+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-09-24T16:02:32+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2025-09-24T16:02:47+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-10-01T06:22:33+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2025-10-02T06:01:49+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-10-09T05:15:52+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2025-10-10T08:20:44+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-10-15T14:16:34+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-10-16T11:43:09+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-10-22T04:39:34+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-10-23T05:34:22+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2025-10-23T09:42:17+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-11-05T06:06:05+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-11-05T06:07:16+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-11-13T05:54:52+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-11-17T03:23:11+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-11-19T11:19:08+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-11-22T01:26:45+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-11-24T07:26:30+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-11-28T00:40:51+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-12-01T11:19:30+00:00",
+   "processName": "softwareupdate"
+  },
+  {
+   "date": "2025-12-01T23:31:25+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-12-02T11:32:06+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-12-02T13:05:49+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-12-04T03:52:09+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-12-04T03:52:09+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-12-04T03:59:09+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-12-11T04:52:47+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-12-12T11:22:21+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-12-15T04:55:51+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-12-15T12:37:09+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-12-15T16:29:07+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2025-12-22T15:15:42+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-12-23T11:56:12+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-12-23T11:56:12+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-12-23T12:01:12+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2025-12-23T12:01:23+00:00",
+   "processName": "bootinstalld"
+  },
+  {
+   "date": "2026-01-05T12:06:15+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-01-06T07:44:38+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-01-06T09:07:36+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-01-11T00:20:50+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-01-19T06:25:16+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-01-20T11:35:57+00:00",
+   "processName": "Installer"
+  },
+  {
+   "date": "2026-01-22T05:42:01+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-01-23T02:31:00+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-01-23T09:14:35+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-01-27T10:09:06+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-02-01T09:09:32+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-02-04T03:47:25+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-02-05T01:30:39+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-05T02:43:07+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-05T02:43:14+00:00",
+   "processName": "bootinstalld"
+  },
+  {
+   "date": "2026-02-07T10:47:44+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-07T10:47:45+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-07T10:47:51+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-07T10:47:57+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-12T13:54:51+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-14T02:02:37+00:00",
+   "processName": "Installer"
+  },
+  {
+   "date": "2026-02-14T02:03:20+00:00",
+   "processName": "Installer"
+  },
+  {
+   "date": "2026-02-14T02:03:46+00:00",
+   "processName": "Installer"
+  },
+  {
+   "date": "2026-02-18T13:23:13+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-18T13:23:17+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-02-18T13:24:22+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-21T11:25:03+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-02-21T11:25:17+00:00",
+   "processName": "bootinstalld"
+  },
+  {
+   "date": "2026-02-25T09:52:15+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-03-05T02:27:52+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-03-05T13:17:57+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-03-11T10:45:55+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-03-11T11:15:42+00:00",
+   "processName": "Installer"
+  },
+  {
+   "date": "2026-03-11T11:24:09+00:00",
+   "processName": "Installer"
+  },
+  {
+   "date": "2026-03-14T15:50:20+00:00",
+   "processName": "Installer"
+  },
+  {
+   "date": "2026-03-18T02:44:39+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-03-19T08:57:40+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-03-26T01:13:29+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-03-26T13:03:49+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-04-01T02:49:52+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-04-04T05:17:42+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-04-04T05:17:46+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-04-10T15:55:25+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-04-30T07:06:56+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-05-06T07:23:16+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-05-06T07:23:17+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-05-10T15:35:44+00:00",
+   "processName": "appstoreagent"
+  },
+  {
+   "date": "2026-05-12T18:57:57+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-05-20T06:44:41+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-05-27T23:54:42+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-05-28T15:10:54+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-06-03T06:17:43+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-06-12T14:45:16+00:00",
+   "processName": "Installer"
+  },
+  {
+   "date": "2026-07-16T03:57:23+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-07-16T03:57:23+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-07-18T16:43:27+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-07-18T16:43:27+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-07-18T16:52:16+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-07-18T16:52:25+00:00",
+   "processName": "bootinstalld"
+  },
+  {
+   "date": "2026-07-24T18:44:40+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-07-28T22:53:30+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-07-29T08:23:50+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-08-05T22:53:27+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-08-07T01:37:04+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-08-12T05:42:38+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-08-19T13:42:08+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-08-19T16:41:47+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-08-26T13:41:07+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-08-27T10:42:13+00:00",
+   "processName": "softwareupdated"
+  },
+  {
+   "date": "2026-09-02T17:35:17+00:00",
+   "processName": "XProtectUpdateService"
+  },
+  {
+   "date": "2026-09-02T21:58:30+00:00",
+   "processName": "softwareupdated"
+  }
+ ]
+}

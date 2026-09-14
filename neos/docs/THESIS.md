@@ -151,6 +151,21 @@ The years go into three things, none of which a superoptimizer can do:
 3. **A boundary per input type.** Every domain this architecture has entered
    failed at the boundary and never at the law — six for six.
 
+## 6. Items 2 and 3, done once, measured
+
+`FAIR2.md` took a second independent oracle — macOS install receipts — and
+turned it into a boundary with `neos seed`. Time-split, on 71 installs the
+seed never saw:
+
+    false-page rate     64.8% -> 11.3%
+    real failures hidden       0        (the naive seed hid 3; prevalence fixed it)
+    decodes             2,843 -> 280
+    saving              75.8% -> 97.6%
+    laws consulted             0
+
+That is the shape of the years: an oracle (item 2) becomes a boundary
+(item 3), and the laws never know it happened. One stream, one week.
+
 **The honest limit of this file:** conditions 1 and 2 were tested with
 synthetic laws of the correct form, not with a hundred real ones. What it
 establishes is that the architecture *admits* hundreds — not that any

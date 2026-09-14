@@ -94,11 +94,36 @@ not. If your logs are not in English, emit a level field.
 the `m` is a word character, so `\bfail` could not match. Escapes are now
 stripped at the boundary.)
 
+## Turn your own ground truth into a boundary
+
+If anything independent records outcomes — install receipts, exit codes, a
+deploy ledger, tickets closed as not-a-bug — hand it the known-good ones:
+
+    neos seed app.log --known-good outcomes.txt -o routine.json
+    neos app.log --routine routine.json
+
+`seed` finds the signatures the laws paged on *inside successful outcomes*,
+keeps only those present in ≥5% of them (boilerplate, not a transient that
+happened to co-occur), and writes them out with provenance. `--routine` then
+hides rulings on those signatures. It can only hide; it cannot promote.
+
+Measured on `install.log`, time-split so the test never saw the seed:
+
+    false-page rate on unseen installs    64.8%  ->  11.3%
+    real failures hidden                            0
+    decodes                               2,843  ->  280
+    token saving                          75.8%  ->  97.6%
+    laws changed                                    0
+
+Full accounting, including the version of this that hid three real
+failures before the prevalence rule existed: [FAIR2.md](FAIR2.md).
+
 ## Before you trust it
 
-Measured incident recall is **71.2%**, 95% CI [58.6%, 81.2%], and false-page
-rate is **unmeasured**. This is a filter to run *beside* your alerting, not a
-replacement for it.
+Measured incident recall is **71.2%**, 95% CI [58.6%, 81.2%]. Measured
+false-page rate on the laws alone is **76.0%** — three of four successful
+installs got a page — falling to **11.3%** with an oracle-seeded boundary.
+This is a filter to run *beside* your alerting, not a replacement for it.
 
     neos label /path/to/your.log -o review.jsonl   # stratified sample
     # a human fills in the "human" field

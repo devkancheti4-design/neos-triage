@@ -1,0 +1,25 @@
+{
+ "source": "/var/log/fsck_apfs_error.log",
+ "measured": "2026-09-13",
+ "lost": "2026-09-14 (truncated to 0 bytes by macOS)",
+ "note": "PARTIAL. Per-timestamp reduction (worst exit code across containers completing at that second) from the first oracle pass. The per-(timestamp, container) form used for the 59-run test in FAIR.md was never written to disk and cannot be rebuilt from this. Kept because it is the only surviving ground truth: 17 completion times, 7 non-zero.",
+ "worst_exit_code_by_completion_time": {
+  "Mon Sep  7 22:33:58 2026": 65,
+  "Mon Sep  7 22:34:11 2026": 0,
+  "Mon Sep  7 22:35:06 2026": 0,
+  "Tue Sep  8 10:32:22 2026": 65,
+  "Tue Sep  8 10:33:17 2026": 0,
+  "Wed Sep  9 09:49:22 2026": 65,
+  "Wed Sep  9 09:49:23 2026": 65,
+  "Wed Sep  9 09:49:39 2026": 0,
+  "Wed Sep  9 09:50:18 2026": 0,
+  "Wed Sep  9 15:28:16 2026": 65,
+  "Wed Sep  9 15:30:28 2026": 0,
+  "Thu Sep 10 05:39:48 2026": 0,
+  "Thu Sep 10 07:55:55 2026": 0,
+  "Thu Sep 10 09:42:46 2026": 65,
+  "Thu Sep 10 17:25:12 2026": 65,
+  "Thu Sep 10 17:25:29 2026": 0,
+  "Fri Sep 11 08:22:00 2026": 0
+ }
+}

@@ -105,6 +105,28 @@ than 41, because 2,794 events the laws wanted to surface were being hidden.
 > **Safety cost 13 points of the saving. The 89.2% was not a better result;
 > it was the same result with the incidents removed.**
 
+## The oracle is gone
+
+On 2026-09-14, the day after this was measured, macOS truncated
+`/var/log/fsck_apfs_error.log` to **zero bytes**. There is no rotated copy and
+no local snapshot predating it. **This result can no longer be reproduced from
+this machine.** The method above is complete and the number stands as
+measured; the input does not exist any more.
+
+`fairtest.py` now refuses to run on an empty oracle. Before that fix it
+printed `INCIDENT RECALL 0.0% [0.0%, 0.0%]` — a 0/0 dressed as a measurement.
+An oracle that has vanished and a tool that catches nothing must never print
+the same line.
+
+What survives is `oracles/fsck_exit_codes_partial.json`: the per-timestamp
+reduction from the first pass, 17 completion times, 7 non-zero. It is not
+enough to rebuild the 59-run test and it is labelled that way.
+
+The rule this bought, applied to every oracle since: **snapshot it into the
+repository on the day of measurement.** `FAIR2.md`'s receipts are in
+`oracles/install_receipts.json`, reduced to timestamp and process so that
+the App Store purchases in the original are not shipped.
+
 ## Limits of this test
 
 * **n = 59 incidents, one machine, one subsystem.** The interval is wide and

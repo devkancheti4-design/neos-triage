@@ -21,4 +21,4 @@ __all__ = ["route", "redial", "decline", "ACT", "DEM", "HAVE", "NEED", "KOF",
            "fold_route", "hazards", "doubts_actions", "HAZARD_NAMES",
            "DOUBT_NAMES", "deciding_hazards", "deciding_doubts",
            "Packet", "SCHEMA"]
-__version__ = "0.2.1"
+__version__ = "0.3.0"

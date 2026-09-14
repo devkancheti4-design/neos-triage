@@ -23,9 +23,12 @@ token saving was hiding a failure that recurs 1,113 times. Fixing it cost 13
 points of the saving, because the 89% published earlier was the same result
 with the incidents removed.
 
-**False-page rate is still unmeasured.** Run it beside your existing alerting,
-not instead of it. `neos label` / `neos score` produce the evidence for your
-own stream. → [FAIR.md](FAIR.md), [DEPLOY.md](DEPLOY.md)
+**False-page rate, now measured: 76.0%** of successful installs got a page on
+the laws alone — Apple boilerplate containing the word "error". An oracle-
+seeded boundary (`neos seed`) takes that to **11.3%** on unseen installs
+with no real failure hidden, and the token saving from 76% to **97.6%**.
+Run it beside your existing alerting, not instead of it.
+→ [FAIR.md](FAIR.md), [FAIR2.md](FAIR2.md), [DEPLOY.md](DEPLOY.md)
 
 ## How it works
 

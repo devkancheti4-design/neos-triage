@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "neos-triage"
-version = "0.2.1"
+version = "0.3.0"
 # 0.x ON PURPOSE. Measured incident recall is 71.2% against independent
 # ground truth, false-page rate is unmeasured, and it went 0% -> 71.2% on a
 # dedup bug found last week. A 1.x on PyPI claims a stability nobody has

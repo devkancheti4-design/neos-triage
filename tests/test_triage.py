@@ -415,6 +415,90 @@ def test_the_certifier_rejects_a_law_that_is_monotone_but_not_composable():
     assert not r["homomorphic"] and not r["composable"], r
 
 
+@case
+def test_seed_rejects_transients_that_merely_cooccur_with_a_success():
+    """Three genuine install failures landed inside the window of an
+    unrelated success and the naive seed marked them routine. Prevalence is
+    what separates boilerplate (in most successes) from a transient (in a
+    few), and the default threshold came from that measurement."""
+    from neos.seed import seed
+    boiler, real = b"B" * 16, b"R" * 16
+    kg = [1000.0 * k for k in range(1, 101)]         # 100 known-good outcomes
+    events = []
+    for k, t in enumerate(kg):
+        events.append((t - 10, "runbook", boiler, "boilerplate error line"))
+        if k < 3:                                    # the real failure, 3 times = 3%
+            events.append((t - 20, "runbook", real, "had errors preventing the install"))
+    out = seed(events, kg, window=600, min_prevalence=0.05)
+    routine = {r["signature"] for r in out["routine"]}
+    assert boiler.hex() in routine, "boilerplate in 100/100 windows must be routine"
+    assert real.hex() not in routine, "a line in 3/100 windows is a transient, not boilerplate"
+    assert any(r["signature"] == real.hex() for r in out["rejected_as_transient"])
+    assert out["known_good_windows"] == 100
+
+
+@case
+def test_seed_only_ever_hides_never_promotes():
+    """--routine can hide a ruling on proven boilerplate. It must not be able
+    to turn a suppress into a page, or the oracle would be deciding."""
+    from neos.seed import seed
+    sig = b"S" * 16
+    kg = [1000.0 * k for k in range(1, 21)]
+    events = [(t - 5, "suppress", sig, "quiet line") for t in kg]
+    out = seed(events, kg)
+    assert out["routine"] == [] and out["rejected_as_transient"] == [], \
+        "a line that never paged cannot enter the routine set"
+
+
+@case
+def test_known_good_reads_timestamps_and_a_plist():
+    import tempfile, plistlib, datetime, os
+    from neos.seed import load_known_good
+    with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+        f.write("2026-01-02 03:04:05\nnot a date\n2026-01-02T03:04:06Z\n"); tp = f.name
+    with tempfile.NamedTemporaryFile("wb", suffix=".plist", delete=False) as f:
+        plistlib.dump([{"date": datetime.datetime(2026, 1, 2, 3, 4, 5), "displayName": "x"},
+                       {"displayName": "no date"}], f); pp = f.name
+    try:
+        assert len(load_known_good(tp)) == 2
+        assert len(load_known_good(pp)) == 1
+    finally:
+        os.unlink(tp); os.unlink(pp)
+
+
+@case
+def test_routine_set_round_trips_through_json():
+    import tempfile, json, os
+    from neos.seed import seed, load_routine
+    sig = b"\x01\x02" * 8
+    kg = [1000.0 * k for k in range(1, 21)]
+    out = seed([(t - 1, "page", sig, "x") for t in kg], kg)
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
+        json.dump(out, f); path = f.name
+    try:
+        assert load_routine(path) == {sig}
+    finally:
+        os.unlink(path)
+
+
+@case
+def test_parse_ts_honours_the_utc_offset():
+    """Stripping the offset and calling .timestamp() reads the naive time as
+    LOCAL. "12:54:06-07" is 19:54 UTC, not 12:54 in whatever zone this test
+    runs in. neos seed joins against oracles in UTC and was landing every
+    window on the wrong events."""
+    import datetime as _dt
+    from neos.stream import parse_ts
+    U = _dt.timezone.utc
+    at = lambda s: _dt.datetime.fromtimestamp(parse_ts(s), U).strftime("%H:%M")
+    assert at("2024-10-29 12:54:06-07") == "19:54"
+    assert at("2024-10-29 12:54:06+05:30") == "07:24"
+    assert at("2024-10-29 12:54:06+0530") == "07:24"
+    assert at("2026-09-12T22:42:46Z") == "22:42"
+    assert parse_ts("2024-10-29 12:54:06-07") == parse_ts("2024-10-29 19:54:06Z")
+    assert parse_ts("Thu Sep 10 17:25:12 2026") is not None, "no-offset forms still parse"
+
+
 def main():
     p = f = 0
     for c in CASES:

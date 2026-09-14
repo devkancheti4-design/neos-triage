@@ -28,6 +28,15 @@ print(f"  ORACLE (fsck_apfs_error.log, exit codes, never seen by the tool)")
 print(f"    {len(oracle)} (time, container) runs: "
       f"{sum(1 for v in oracle.values() if v)} non-zero, "
       f"{sum(1 for v in oracle.values() if not v)} clean\n")
+if not oracle:
+    # REFUSE, do not report. On 2026-09-14 macOS truncated the error log to
+    # zero bytes and this harness printed "INCIDENT RECALL 0.0% [0.0%, 0.0%]"
+    # -- a 0/0 dressed as a measurement. An oracle that has vanished is a
+    # different fact from a tool that catches nothing, and the two must
+    # never print the same line.
+    raise SystemExit("  ORACLE IS EMPTY. The ground truth file was truncated or rotated.\n"
+                     "  Nothing can be measured. Point ORACLE at a snapshot, or re-run\n"
+                     "  fsck to regenerate exit codes. No number is reported.")
 
 # ---------- THE TOOL on the human-readable log
 LINE = re.compile(r"^(/dev/\S+?):\s?(.*)$")

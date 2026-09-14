@@ -33,28 +33,46 @@ _TS_FORMATS = (
 
 
 def parse_ts(ts):
-    """Best-effort epoch seconds, or None. Tolerant on purpose: dedup falls
-    back to counting when a stream carries no usable time, and a wrong
-    timestamp is worse than none."""
+    """Best-effort epoch seconds, or None.
+
+    HONOURS THE OFFSET. The first version stripped "-07" / "+05:30" / "Z"
+    and then called .timestamp() on the naive result, which reads it as
+    LOCAL time. "2024-10-29 12:54:06-07" became 12:54 in this machine's zone
+    instead of 19:54 UTC -- twelve and a half hours out. Windowed dedup did
+    not notice, because every event shifted by the same amount. `neos seed`
+    noticed immediately: its oracle is in UTC, so every known-good window
+    landed on the wrong events and the safety check passed for the wrong
+    reason.
+
+    With no offset present the time is still read as local, unchanged:
+    BSD syslog carries neither offset nor year and there is no right answer.
+    """
     if not ts:
         return None
     import datetime as _dt
-    # NOT a bare .replace("T", " "): that turns "Thu Sep 10" into "hu Sep 10"
-    # and silently returns None for every BSD-style timestamp. The ISO
-    # separator only counts between a digit and a digit.
     t = re.sub(r"(?<=\d)T(?=\d)", " ", ts.strip())
-    t = re.sub(r"(?<=\d)Z$", "", t)
-    t = re.sub(r"([.,]\d+)", "", t)                 # drop fractional seconds
-    t = re.sub(r"\s*[-+]\d{2}:?\d{0,2}$", "", t)    # drop trailing offset
+    t = re.sub(r"([.,]\d+)(?=\s*(?:[-+]\d|Z|$))", "", t)     # fractional seconds
+    off = None
+    m = re.search(r"(?<=\d)\s*(Z|[-+]\d{2}(?::?\d{2})?)$", t)
+    if m:
+        z = m.group(1); t = t[:m.start()].rstrip()
+        if z == "Z":
+            off = 0
+        else:
+            sign = -1 if z[0] == "-" else 1
+            hh, mm = int(z[1:3]), int(z[3:].replace(":", "") or 0)
+            off = sign * (hh * 3600 + mm * 60)
     t = re.sub(r"\s+", " ", t).strip()
     for f in _TS_FORMATS:
         try:
             d = _dt.datetime.strptime(t, f)
-            if d.year == 1900:                      # syslog-bsd has no year
-                d = d.replace(year=_dt.date.today().year)
-            return d.timestamp()
         except ValueError:
             continue
+        if d.year == 1900:                          # syslog-bsd has no year
+            d = d.replace(year=_dt.date.today().year)
+        if off is None:
+            return d.timestamp()                    # naive -> local, as before
+        return d.replace(tzinfo=_dt.timezone(_dt.timedelta(seconds=off))).timestamp()
     return None
 
 

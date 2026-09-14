@@ -46,7 +46,7 @@ def events(path, adapter):
 
 
 def verdicts(path, adapter, hands, budget, dedup_cap, stats=None,
-             window=300.0, every=20):
+             window=300.0, every=20, routine=None):
     """One pass. Yields a verdict dict per DISTINCT event, and the dedup so
     the caller can report repeats. Shared by triage and label: if they used
     separate loops the labelled sample would not describe the actual run."""
@@ -70,7 +70,14 @@ def verdicts(path, adapter, hands, budget, dedup_cap, stats=None,
         act, dem, held, obs, doubt, case, acts = rule(
             pkt, hands=hands, budget_used=spent, budget_cap=budget)
         spent += len(acts)
-        if dd.seen(signature(ev), ev.epoch):
+        sig = signature(ev)
+        if routine and sig in routine:
+            # ORACLE-SEEDED BOUNDARY. The laws already ruled above; this only
+            # decides whether a ruling on known boilerplate is shown. It
+            # cannot promote anything, only hide what an oracle proved routine.
+            stats["routine"] = stats.get("routine", 0) + 1
+            continue
+        if dd.seen(sig, ev.epoch):
             stats["ruled_then_deduped"] = stats.get("ruled_then_deduped", 0) + 1
             continue
         yield n, dd, {
@@ -130,6 +137,39 @@ def cmd_label(a):
     return 0
 
 
+def cmd_seed(a):
+    from .seed import seed, load_known_good
+    ad, rate = resolve(a.path, a.format)
+    if ad is None:
+        return 3
+    kg = load_known_good(a.known_good)
+    if not kg:
+        print("neos: no timestamps could be read from --known-good", file=sys.stderr)
+        return 2
+    rows = []
+    hands = default_hands()
+    for ev in events(a.path, ad):
+        pkt = encode(ev)
+        act, dem, held, obs, doubt, case, acts = rule(pkt, hands=hands)
+        rows.append((ev.epoch, disposition(case, held, act), signature(ev), ev.message))
+    out = seed(rows, kg, a.window, a.min_prevalence)
+    with open(a.out, "w") as f:
+        json.dump(out, f, indent=1)
+    print(f"\n  {len(kg):,} known-good outcomes, {out['known_good_windows']:,} with events "
+          f"in a {a.window:.0f}s window")
+    print(f"  {len(out['routine'])} signatures marked ROUTINE (paged in >= "
+          f"{100*a.min_prevalence:.0f}% of known-good windows):")
+    for r in out["routine"]:
+        print(f"    {r['in_windows']:>4}/{out['known_good_windows']:<4} {r['example'][:70]}")
+    if out["rejected_as_transient"]:
+        print(f"  {len(out['rejected_as_transient'])} paged inside a window but too rarely "
+              f"to be boilerplate -- KEPT as real:")
+        for r in out["rejected_as_transient"][:6]:
+            print(f"    {r['in_windows']:>4}/{out['known_good_windows']:<4} {r['example'][:70]}")
+    print(f"\n  wrote {a.out}.  Apply with:  neos {a.path} --routine {a.out}\n")
+    return 0
+
+
 def cmd_score(a):
     from .label import score
     return score(a.path)
@@ -137,7 +177,7 @@ def cmd_score(a):
 
 def main(argv=None):
     argv = list(sys.argv[1:] if argv is None else argv)
-    SUB = {"triage", "label", "score"}
+    SUB = {"triage", "label", "score", "seed"}
     if not argv or (argv[0] not in SUB and not argv[0].startswith("-")):
         argv = ["triage"] + argv           # `neos foo.log` still means triage
     elif argv and argv[0].startswith("-") and argv[0] not in ("-h", "--help"):
@@ -160,8 +200,23 @@ def main(argv=None):
     lb.add_argument("--dedup-cap", type=int, default=200_000)
     lb.add_argument("--budget", type=float, default=1e9)
 
+    sd = sub.add_parser("seed", help="turn known-good outcomes into a routine set")
+    sd.add_argument("path", help="log file")
+    sd.add_argument("--known-good", required=True,
+                    help="timestamps of known-good outcomes, one per line; "
+                         "or a macOS InstallHistory.plist")
+    sd.add_argument("-o", "--out", default="routine.json")
+    sd.add_argument("--window", type=float, default=600.0,
+                    help="seconds before each outcome to attribute (default 600)")
+    sd.add_argument("--min-prevalence", type=float, default=0.05,
+                    help="fraction of known-good windows a signature must page in "
+                         "to count as boilerplate (default 0.05, measured)")
+    sd.add_argument("--format", choices=[x.name for x in ADAPTERS])
+
     ap = sub.add_parser("triage", help="rule on a stream (default)")
     ap.add_argument("path", help="log file, or - for stdin")
+    ap.add_argument("--routine", help="routine.json from `neos seed`; hides "
+                    "signatures an oracle proved routine")
     ap.add_argument("--format", choices=[a.name for a in ADAPTERS],
                     help="force an adapter instead of detecting one")
     ap.add_argument("--json", action="store_true", help="one JSON verdict per line")
@@ -185,15 +240,21 @@ def main(argv=None):
         return cmd_score(a)
     if a.cmd == "label":
         return cmd_label(a)
+    if a.cmd == "seed":
+        return cmd_seed(a)
 
     adapter, rate = resolve(a.path, a.format)
     if adapter is None:
         return 3 if os.path.exists(a.path) or a.path == "-" else 2
 
     hands = default_hands()
+    routine = None
+    if getattr(a, "routine", None):
+        from .seed import load_routine
+        routine = load_routine(a.routine)
     out, stats = collections.Counter(), {}
     for _n, dd, v in verdicts(a.path, adapter, hands, a.budget, a.dedup_cap,
-                              stats, a.window, a.realert_every):
+                              stats, a.window, a.realert_every, routine):
         d = v["disposition"]
         out[d] += 1
         if a.json:
@@ -218,12 +279,14 @@ def main(argv=None):
     if not n:
         print("neos: no events read", file=sys.stderr); return 1
     uniq = sum(out.values())
-    out["deduped"] = n - uniq
+    out["deduped"] = n - uniq - stats.get("routine", 0)
     P = lambda c, t: f"{c:>9,}  {100*c/t:6.2f}%" if t else f"{c:>9,}       -"
     print(f"\n  {a.path}   adapter={adapter.name if adapter else 'stdin'}"
           + (f"  ({100*rate:.1f}% parsed)" if a.path != "-" else ""))
     print(f"  {n:,} events -> {uniq:,} distinct\n")
     print(f"    {'deduped (hash set, not a law)':32s} {P(out['deduped'], n)}")
+    if stats.get("routine"):
+        print(f"    {'routine (oracle-seeded boundary)':32s} {P(stats['routine'], n)}")
     for d in ("suppress", "ticket", "page", "runbook", "held", "no-call",
               "UNDISPOSED"):
         if out[d]:
